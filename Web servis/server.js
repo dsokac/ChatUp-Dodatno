@@ -2,6 +2,11 @@
 var express = require("express");
 var app = express();
 
+// Include 'body-parser' library for reading POST data
+// and make the application use it.
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: true}));
+
 
 // **************************************
 // Include JavaScript functions from

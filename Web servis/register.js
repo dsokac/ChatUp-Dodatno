@@ -5,7 +5,7 @@ var database = nano.use("chat_app");
 // Register logic
 function register(req, res)
 {
-	var query = req.query;
+	var query = req.body;
 	var response = new Object();
 	if (query && query.mail && query.username && query.password && query.gender && query.dateOfBirth) {
 		database.view("register", "all", function(error, body) {
