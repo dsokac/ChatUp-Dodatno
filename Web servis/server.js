@@ -13,11 +13,13 @@ app.use(bodyParser.urlencoded({extended: true}));
 // other files.
 //
 var register = require("./register.js");
+var login = require("./log_in.js");
 
 // **************************************
 // Register routes for Web services here.
 //
 app.post("/register", register);
+app.post("/login",login);
 
 
 // Listen to port 8080.
