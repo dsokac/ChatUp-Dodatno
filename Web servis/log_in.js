@@ -2,6 +2,9 @@
 var nano = require("nano")("http://localhost:5984");
 var database = nano.use("chat_app");
 
+//global variable for getting wanted couchDB document for later update
+var targetDoc_login  = {};
+
 /*
 	Login function for signing into system.
 	
@@ -16,19 +19,21 @@ function log_in(req, res)
 	
 	if(query && query.mail && query.password)
 	{
-	     database.view("register","all",function(error,data){
+	     database.view("users","offline_users",function(error,data){
 		      if(!error)
 			  {
-			     if(login_userExists(query.email, query.password, data.rows))
+			     if(login_userExists(query.mail, query.password, data.rows))
 				 {
 				    response.status = "0";
 					response.message = "Successfully logged in.";
 					res.send(JSON.stringify(response));
+					
+					updateStatus(targetDoc,"online");
 				 }
 				 else
 				 {
-					response.status = "0";
-					response.message = "The user doesn't exists in database.";
+					response.status = "1";
+					response.message = "The user doesn't exists in database or already online.";
 					res.send(JSON.stringify(response));
 				 }
 			  }
@@ -41,15 +46,16 @@ function log_in(req, res)
 		 });
 	}
 	else
-	{
+	{	
 		response.status = "1";
 		response.message = "Log in failed. Data is missing.";
-		res.send(JSON.stringfy(response));
+		res.send(JSON.stringify(response));
 	}
 }
 
 /*
-Function which validates if given email and password exists in database
+Function validates if given email and password exists in view and 
+sets value of targetDoc variable to wanted couchDB document.
   
   PARAMS:
 	**email, password - input of login form
@@ -66,9 +72,30 @@ function login_userExists(email, password, data)
 		if(data[i].id === email && data[i].value.password === password)
 		{
 			output = true;
+		    targetDoc = data[i].value;
+			break;
 		}
 	}
 	return output;
+}
+
+/*
+	Function updates user's status to online.
+	
+	PARAMS:
+	** targetDoc - JSON object of wanted document from couchDB, document which references the user that is logging in.
+	** status - new wanted value for status field in database
+	
+*/
+function updateStatus(targetDoc, status)
+{
+	var jsonObject = targetDoc;
+	jsonObject.status = status;
+
+	database.insert(jsonObject, jsonObject._id, function(error, body){
+		if(error) console.log(error);
+		else console.log("Document '"+jsonObject._id+"' has been updated successfully. The user '"+jsonObject._id+"' is logged in.");
+	});
 }
 
 module.exports = log_in;
