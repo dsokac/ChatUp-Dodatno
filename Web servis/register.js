@@ -8,7 +8,7 @@ function register(req, res)
 	var query = req.body;
 	var response = new Object();
 	if (query && query.mail && query.username && query.password && query.gender && query.dateOfBirth) {
-		database.view("register", "all", function(error, body) {
+		database.view("view", "getUserIDs", function(error, body) {
 			if (!error) {
 				if (!userExists(query.mail, body.rows))
 				{
