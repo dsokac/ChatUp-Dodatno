@@ -19,7 +19,7 @@ function log_in(req, res)
 	
 	if(query && query.mail && query.password)
 	{
-	     database.view("users","offline_users",function(error,data){
+	     database.view("view","getOfflineUsers",function(error,data){
 		      if(!error)
 			  {
 			     if(login_userExists(query.mail, query.password, data.rows))
