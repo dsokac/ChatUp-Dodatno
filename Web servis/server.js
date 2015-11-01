@@ -14,12 +14,14 @@ app.use(bodyParser.urlencoded({extended: true}));
 //
 var register = require("./register.js");
 var login = require("./log_in.js");
+var logout = require("./log_out.js");
 
 // **************************************
 // Register routes for Web services here.
 //
 app.post("/register", register);
 app.post("/login",login);
+app.post("/logout", logout);
 
 
 // Listen to port 8080.
