@@ -69,10 +69,10 @@ function login_userExists(email, password, data)
 	var output = false;
     for(var i = 0; i<data.length ; i++)
 	{
-		if(data[i].id === email && data[i].value.password === password)
+		if(data[i].id === email && data[i].key.password === password)
 		{
 			output = true;
-		    targetDoc = data[i].value;
+		    targetDoc = data[i].key;
 			break;
 		}
 	}
