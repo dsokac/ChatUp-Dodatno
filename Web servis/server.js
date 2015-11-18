@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 var register = require("./register.js");
 var login = require("./log_in.js");
 var logout = require("./log_out.js");
+var getMessages = require("./get_messages.js");
 
 // **************************************
 // Register routes for Web services here.
@@ -22,6 +23,7 @@ var logout = require("./log_out.js");
 app.post("/register", register);
 app.post("/login",login);
 app.post("/logout", logout);
+app.post("/getMessages", getMessages);
 
 
 // Listen to port 8080.
