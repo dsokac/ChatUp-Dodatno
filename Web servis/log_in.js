@@ -33,7 +33,7 @@ function log_in(req, res)
 				 else
 				 {
 					response.status = "1";
-					response.message = "The user doesn't exists in database or already online.";
+					response.message = "The user doesn't exists in database.";
 					res.send(JSON.stringify(response));
 				 }
 			  }
