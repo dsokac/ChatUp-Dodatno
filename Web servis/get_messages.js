@@ -42,8 +42,8 @@ function getChatByParticipants(email1, email2, data)
 	var chat = null;
 	for (var i = 0; i < data.length; i++) 
 	{
-		if (data[i].participants.indexOf(email1) > -1 && data[i].participants.indexOf(email2) > -1) {
-			chat = data[i].value;
+		if (data[i].value.participants.indexOf(email1) > -1 && data[i].value.participants.indexOf(email2) > -1) {
+			chat = data[i].value.chat;
 			break;
 		}
 	}
