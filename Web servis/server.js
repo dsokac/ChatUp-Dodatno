@@ -17,7 +17,7 @@ var login = require("./log_in.js");
 var logout = require("./log_out.js");
 var getMessages = require("./get_messages.js");
 var getUserData = require("./get_userData.js");
-var registeredUseres = require("./registeredUsers.js");
+var registeredUsers = require("./registeredUsers.js");
 
 // **************************************
 // Register routes for Web services here.
