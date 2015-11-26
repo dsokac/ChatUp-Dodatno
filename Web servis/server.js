@@ -19,6 +19,7 @@ var getMessages = require("./get_messages.js");
 var getUserData = require("./get_userData.js");
 var registeredUsers = require("./registeredUsers.js");
 var addFriends = require("./add_friend.js");
+var forgotPassword = require("./forgot_password.js");
 // **************************************
 // Register routes for Web services here.
 //
@@ -29,7 +30,7 @@ app.post("/getMessages", getMessages);
 app.post("/getUserData", getUserData);
 app.post("/registeredUsers",registeredUsers);
 app.post("/addFriends",addFriends);
-
+app.post("/forgotPassword",forgotPassword);
 
 // Listen to port 8080.
 app.listen(8080, function() {
