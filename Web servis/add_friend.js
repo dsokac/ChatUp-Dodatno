@@ -2,7 +2,7 @@
 var nano = require("nano")("http://localhost:5984");
 var database = nano.use("chat_app");
 
-function addFriends(req, res)
+function add_friend(req, res)
 {
 	//email_prijavljeni - email of user who is logged in
 	var email_prijavljeni = req.body.email1;
@@ -15,53 +15,55 @@ function addFriends(req, res)
 	//if req has data
 	if (email_prijavljeni && email_odabrani) {
 		database.view("view", "getRegisteredUsers", function(error, data) {
-		if(!error)
-		{	//if both mails exists in database
-			if(checkMails(email_prijavljeni, email_odabrani, data.rows))
-			{
-				for(var i = 0; i< data.length ; i++)
+			if(!error)
+			{	//if both mails exists in database
+				if(checkMails(email_prijavljeni, email_odabrani, data.rows))
 				{
-					//for each email in database who is equal to email of 'user who is logged in'
-					if(data[i].key.mail === email_prijavljeni)
+					for(var i = 0; i< data.length ; i++)
 					{
-						//add 'email_odabrani' to friend list
-						data[i].key.friends.push(email_odabrani);
-						//insert into database
-						database.insert(data[i].key, data[i].key._id, function(error, body){
-						if(error) console.log(error);
-						else console.log("Document '"+data[i].key._id+"' has been updated successfully. The user '"+data[i].key._id+"' has new friend.");
+						//for each email in database who is equal to email of 'user who is logged in'
+						if(data[i].key.mail === email_prijavljeni)
+						{
+							//add 'email_odabrani' to friend list
+							data[i].key.friends.push(email_odabrani);
+							//insert into database
+							database.insert(data[i].key, data[i].key._id, function(error, body){
+							if(error) console.log(error);
+							else console.log("Document '"+data[i].key._id+"' has been updated successfully. The user '"+data[i].key._id+"' has new friend.");
+							});
+						}
+						//for each email in database who is equal to email of 'user who will be added to friend list'
+						if(data[i].key.mail === email_odabrani)
+						{
+							//add 'email_prijavljeni' to friend list
+							data[i].key.friends.push(email_prijavljeni);
+							//insert into database
+							database.insert(data[i].key, data[i].key._id, function(error, body){
+							if(error) console.log(error);
+							else console.log("Document '"+data[i].key._id+"' has been updated successfully. The user '"+data[i].key._id+"' has new friend.");
 						});
+						}
 					}
-					//for each email in database who is equal to email of 'user who will be added to friend list'
-					if(data[i].key.mail === email_odabrani)
-					{
-						//add 'email_prijavljeni' to friend list
-						data[i].key.friends.push(email_prijavljeni);
-						//insert into database
-						database.insert(data[i].key, data[i].key._id, function(error, body){
-						if(error) console.log(error);
-						else console.log("Document '"+data[i].key._id+"' has been updated successfully. The user '"+data[i].key._id+"' has new friend.");
-					});
-					}
+					response.status = "0";
+					response.message = "Successfully added friend.";
+					res.send(JSON.stringify(response));
+					
+				} else
+				{
+					response.status = 1;
+					response.message = "Mails doesnt exist in database.";
+					res.send(JSON.stringify(response));
 				}
-				response.status = "0";
-				response.message = "Successfully added friend.";
-				res.send(JSON.stringify(response));
-				
-			} else
+			} 
+			else 
 			{
 				response.status = 1;
-				response.message = "Mails doesnt exist in database.";
+				response.message = "Getting users failure. Error reading database.";
 				res.send(JSON.stringify(response));
 			}
-		} 
-		else {
-			response.status = 1;
-			response.message = "Getting users failure. Error reading database.";
-			res.send(JSON.stringify(response));
-			}
 		}	
-	} else 
+	} 
+	else 
 	{
 		response.status = 1;
 		response.message = "Data fetch failure. Missing data in req.";
