@@ -5,7 +5,7 @@ var database = nano.use("chat_app");
 // for sending e-mail  ->   https://www.npmjs.com/package/nodemailer
 var nodemailer = require('nodemailer');
 
-function forgotPassword(req, res)
+function forgot_password(req, res)
 {
 	//email_forgot - entered 'forgot password mail'
 	var email_forgot = req.body.email1;
@@ -75,8 +75,9 @@ function forgotPassword(req, res)
 			response.message = "Getting users failure. Error reading database.";
 			res.send(JSON.stringify(response));
 			}
-		}	
-	} else 
+		});	
+	}
+	 else 
 	{
 		response.status = 1;
 		response.message = "Data fetch failure. Missing data in req.";
