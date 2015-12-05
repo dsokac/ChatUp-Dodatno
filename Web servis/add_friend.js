@@ -61,7 +61,7 @@ function add_friend(req, res)
 				response.message = "Getting users failure. Error reading database.";
 				res.send(JSON.stringify(response));
 			}
-		}	
+		});	
 	} 
 	else 
 	{
