@@ -4,14 +4,20 @@ var database = nano.use("chat_app");
 
 function getFriends(req, res)
 {
+	console.log("addFriends entered");
 	var query = req.body;
 	var response = new Object();
-
+	
+	
+	
 	//empty array to store all friends of chosen user
 	var friends = [];
 	
+	console.log(query);
+	
 	if(query && query.id)
 	{    //view fetching all users and their friends
+		
 	     database.view("view","getAllFriends",function(error,data){
 		      if(!error)
 			  {
@@ -24,6 +30,7 @@ function getFriends(req, res)
 						   break;
 					  }
 				  }
+				  console.log("friends: " + friends);
 				  //empty array for all registered users
 				  var allUsers = [];
 				  //empty array for all friends of chosen user with their information
@@ -53,7 +60,10 @@ function getFriends(req, res)
 								}
 
 							  }
-							  response.friends = friendsDetails;
+							  response.data = friendsDetails;
+							  response.status = "0";
+							  response.message = "Data loaded successfully";
+							  console.log(response);
 							  res.send(JSON.stringify(response));
 						  }
 					 });
