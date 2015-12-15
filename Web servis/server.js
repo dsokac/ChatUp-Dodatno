@@ -17,7 +17,8 @@ var login = require("./log_in.js");
 var logout = require("./log_out.js");
 var getMessages = require("./get_messages.js");
 var getUserData = require("./get_userData.js");
-var registeredUsers = require("./registeredUsers.js");
+//var registeredUsers = require("./registeredUsers.js");
+var registeredUsers2 = require("./registeredUsers2.js");
 var addFriends = require("./add_friend.js");
 var forgotPassword = require("./forgot_password.js");
 var getFriends = require("./getFriends.js");
@@ -29,10 +30,15 @@ app.post("/login",login);
 app.post("/logout", logout);
 app.post("/getMessages", getMessages);
 app.post("/getUserData", getUserData);
-app.post("/registeredUsers",registeredUsers);
+//app.post("/registeredUsers",registeredUsers);
+app.post("/registeredUsers2",registeredUsers2);
 app.post("/addFriends",addFriends);
 app.post("/forgotPassword",forgotPassword);
 app.post("/getFriends",getFriends);
+
+app.get("/", function(req, res) {
+	res.send("Server is running.");
+});
 
 // Listen to port 8080.
 app.listen(8080, function() {
