@@ -22,6 +22,7 @@ var registeredUsers2 = require("./registeredUsers2.js");
 var addFriends = require("./add_friend.js");
 var forgotPassword = require("./forgot_password.js");
 var getFriends = require("./getFriends.js");
+var saveProfilePic = require("./save_profile_pic.js")
 // **************************************
 // Register routes for Web services here.
 //
@@ -35,6 +36,7 @@ app.post("/registeredUsers2",registeredUsers2);
 app.post("/addFriends",addFriends);
 app.post("/forgotPassword",forgotPassword);
 app.post("/getFriends",getFriends);
+app.post("/saveProfilePic", saveProfilePic);
 
 app.get("/", function(req, res) {
 	res.send("Server is running.");
