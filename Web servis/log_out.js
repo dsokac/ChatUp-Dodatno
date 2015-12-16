@@ -17,13 +17,14 @@ function log_out(req, res)
 	var query = req.body;
 	var response = new Object();
 	
-	if(query && query.mail && query.password)
+	if(query && query.mail)
 	{
-	     database.view("view","getOfflineUsers",function(error,data){
+	     database.view("view","getOnlineUsers",function(error,data){
 		      if(!error)
 			  {
-			     if(logout_userExists(query.mail, query.password, data.rows))
+			     if(logout_userExists(query.mail, data.rows))
 				 {
+					
 				    response.status = "0";
 					response.message = "Successfully logged out.";
 					res.send(JSON.stringify(response));
@@ -64,15 +65,15 @@ sets value of targetDoc variable to wanted couchDB document.
     **true if the user is valid
 	**false if the user is not valid   
 */
-function logout_userExists(email, password, data)
+function logout_userExists(email, data)
 {
 	var output = false;
     for(var i = 0; i<data.length ; i++)
 	{
-		if(data[i].id === email && data[i].value.password === password)
+		if(data[i].id === email)
 		{
 			output = true;
-		    targetDoc = data[i].value;
+		    targetDoc = data[i].key;
 			break;
 		}
 	}
@@ -87,6 +88,7 @@ function logout_userExists(email, password, data)
 	** status - new wanted value for status field in database
 	
 */
+
 function updateStatus(targetDoc, status)
 {
 	var jsonObject = targetDoc;
