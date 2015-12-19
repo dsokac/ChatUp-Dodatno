@@ -19,7 +19,9 @@ function addFriends(req, res)
 				    response.status = "0";
 					response.message = "Successfully added frined. Logged user:"+query.mail1+"; selected user:"+query2.mail2;
 					res.send(JSON.stringify(response));					
-					updateFriendList(targetDoc,query2.mail2);
+					updateFriendList(targetDoc,query2.mail2);									
+					updateFriendList(targetDoc1,query.mail1);
+					
 				 }
 				 else
 				 {
@@ -65,6 +67,7 @@ function addFriends_userExists(email_prij, email_odab, data)
 	{
 		if(data[j].id === email_odab)
 		{
+			targetDoc1 = data[j].key;
 			output2 = true;		   
 			break;		
 		}
@@ -88,5 +91,4 @@ function updateFriendList(targetDoc, friends)
 		else console.log("Document '"+jsonObject._id+"' has been updated successfully. The user '"+jsonObject._id+"' is added.");
 	});
 }
-
 module.exports = addFriends;
