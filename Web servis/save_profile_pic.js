@@ -15,21 +15,15 @@ function saveProfilePic(req, res)
 			if (!error) {
 				if (userExists(query.mail, body.rows))
 				{
-					var attachments = {
-						"profilePicture.jpg": {
-							"content_type":"image/jpg",
-							"data": query.picture
-						}
-					};
 
-					// moguća dorada
-					targetDoc._attachments.push(attachments);
+					var bitmap = new Buffer(query.picture, 'base64');
 					
-					database.insert(targetDoc._id, targetDoc, function(error, body) {
+					database.attachment.insert( query.mail, 'profile.jpeg', bitmap, 'image/jpeg', {rev: targetDoc.rev}, function(error, body) {
 						if (!error) {
 							response.status = "0";
 							response.message = "Update profile picture success.";
 							res.send(JSON.stringify(response));
+
 						}
 						else {
 							response.status = "1";

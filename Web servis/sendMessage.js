@@ -5,7 +5,7 @@ var database = nano.use("chat_app");
 // Message sending logic
 function sendMessage(req, res)
 {
-	var query = req.query;
+	var query = req.body;
 	var response = new Object();
 	if (query && query.id && query.sender && query.message)
 	{
@@ -27,6 +27,7 @@ function sendMessage(req, res)
 						{
 							response.status = "0";
 							response.message = "Message added to conversation.";
+							response.data = newMessage;
 							res.send(JSON.stringify(response));
 						}
 						else
