@@ -11,26 +11,23 @@ function saveProfilePic(req, res)
 	var query = req.body;
 	var response = new Object();
 	if (query && query.mail && query.picture) {
-		database.view("view", "getUserData", function(error, body) {
+		database.view("view", "getAllDataForUser", function(error, body) {
 			if (!error) {
-				if (userExists(query.mail, body.rows))
+				if (userExists(query.mail, body.rows) && query.picture != null)
 				{
-
-					var bitmap = new Buffer(query.picture, 'base64');
-					
-					database.attachment.insert( query.mail, 'profile.jpeg', bitmap, 'image/jpeg', {rev: targetDoc.rev}, function(error, body) {
-						if (!error) {
+					targetDoc.profilePicture = query.picture;
+					database.insert(targetDoc, function(error, body) {
+						if(!error) {
 							response.status = "0";
 							response.message = "Update profile picture success.";
 							res.send(JSON.stringify(response));
-
 						}
 						else {
 							response.status = "1";
 							response.message = "Update picture failure. Failed to insert new pictures.";
 							res.send(JSON.stringify(response));
 						}
-					})
+					});
 				}
 				else {
 					response.status = "1";
