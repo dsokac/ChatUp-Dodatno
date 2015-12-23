@@ -11,7 +11,25 @@ function createConversation(req, res)
 		database.view("view", "getAllMessages", function(error, body) {
 			if (!error) {
 				if (!conversationExists(query.mail1, query.mail2, body.rows)) {
-                    
+                    var conversation = {
+                        chat: [],
+                        participants: query.mail1 + "," + query.mail2,
+                        type: "message"
+                    };
+                    database.insert(conversation, function(error, body) {
+                        if (!error)
+                        {
+                            response.status = "0";
+                            response.message = "Conversation created.";
+                            res.send(JSON.stringify(response));
+                        }
+                        else 
+                        {
+                            response.status = "1";
+                            response.message = "Conversation creation failure. Error creating new conversation.";
+                            res.send(JSON.stringify(response));
+                        }
+                    });
                 }
                 else {
                     response.status = "2";
