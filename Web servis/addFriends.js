@@ -59,8 +59,7 @@ function addFriends_userExists(email_prij, email_odab, data)
 		    targetDoc = data[i].key;
 			output=true;
 			break;
-		}
-						
+		}						
 	}	
 	
 	for(var j = 0; j<data.length ; j++)
@@ -85,10 +84,13 @@ return output3 ;
 function updateFriendList(targetDoc, friends)
 {
 	var jsonObject = targetDoc;	
-	jsonObject.friends.push(friends);
-	database.insert(jsonObject, jsonObject._id, function(error, body){
-		if(error) console.log(error);
-		else console.log("Document '"+jsonObject._id+"' has been updated successfully. The user '"+jsonObject._id+"' is added.");
-	});
+	if (!(jsonObject.friends.indexOf(friends) > -1)) {
+		jsonObject.friends.push(friends);
+		database.insert(jsonObject, jsonObject._id, function(error, body){
+			if(error) console.log(error);
+			else console.log("Document '"+jsonObject._id+"' has been updated successfully. The user '"+jsonObject._id+"' is added.");
+		});
+	}
+	else console.log("Document '"+jsonObject._id+"' has failed to update. You are trying to add duplicate value in friends list.");
 }
 module.exports = addFriends;
