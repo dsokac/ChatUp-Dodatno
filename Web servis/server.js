@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 var register = require("./register.js");
 var login = require("./log_in.js");
 var logout = require("./log_out.js");
-var getMessages = require("./get_messages.js");
+var getMessages = require("./get_messages_2.js");
 var getUserData = require("./get_userData.js");
 //var registeredUsers = require("./registeredUsers.js");
 var registeredUsers2 = require("./registeredUsers2.js");

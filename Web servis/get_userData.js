@@ -8,13 +8,17 @@ function getUserData(req, res)
 	var email = req.body.email;
 	var response = new Object();
 	if (email) {
-		database.view("view", "getUserData", function(error, body) {
+		database.view("view", "getAllDataForUser", function(error, body) {
 			if(!error) {
 				var user = getSpecificUser(email, body.rows);
 				if (user) {
+                    var userData = new Object();
+                    userData.email = email;
+                    userData.username = user.username;
+                    
 					response.status = 0;
 					response.message = "Data fetch success.";
-					response.data = user;
+					response.data = userData;
 					res.send(response);
 				}
 				else {
@@ -43,7 +47,7 @@ function getSpecificUser(email, data)
 	var user = null;
 	for (var i = 0; i < data.length; i++) 
 	{
-		if (data[i].id == email) {
+		if (data[i].key == email) {
 			user = data[i].value;
 			break;
 		}

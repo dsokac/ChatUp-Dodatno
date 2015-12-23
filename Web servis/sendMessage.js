@@ -7,7 +7,7 @@ function sendMessage(req, res)
 {
 	var query = req.query;
 	var response = new Object();
-	if (query && query.id && query.sender && query.message)
+	if (query && query.id && query.sender && query.message && query.type)
 	{
 		database.view("view", "getAllMessages", function(error, body) {
 			if (!error)
@@ -20,6 +20,7 @@ function sendMessage(req, res)
 					newMessage.text = query.message;
 					newMessage.timeSend = (new Date()).getTime().toString();
 					newMessage.location = query.location ? query.location : "";
+                    newMessage.type = query.type
 					
 					conversation.chat.push(newMessage);
 					database.insert(conversation, function(error, body) {
@@ -27,6 +28,7 @@ function sendMessage(req, res)
 						{
 							response.status = "0";
 							response.message = "Message added to conversation.";
+							response.data = newMessage;
 							res.send(JSON.stringify(response));
 						}
 						else
