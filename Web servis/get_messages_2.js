@@ -4,7 +4,7 @@ var database = nano.use("chat_app");
 
 function getMessages(req, res)
 {
-	var email = req.body.email;
+	var email = req.query.email;
 	var response = new Object();
 	
 	if (email) {
@@ -47,16 +47,17 @@ function getMessages(req, res)
 
 function getChatData(email, data)
 {
-	var chatData = null;
+	var chatData = new Array();
 	for (var i = 0; i < data.length; i++) 
 	{
 		if (data[i].value.participants.indexOf(email) > -1) {
-            chatData = new Object();
+            var chatElement = new Object();
             var participants = data[i].value.participants.split(",");
             
-			chatData.chat = data[i].value.chat;
-            chatData.participants = createUserObjectArray(participants);
-			break;
+            chatElement.id = data[i].value._id;
+			chatElement.chat = data[i].value.chat;
+            chatElement.participants = createUserObjectArray(participants);
+			chatData.push(chatElement);
 		}
 	}
 	return chatData;
@@ -80,11 +81,14 @@ function getParticipantUsernames(responseData, data)
     for (var i = 0; i < data.length; i++)
     {
         var row = data[i].value;
-        for (var j = 0; j < responseData.participants.length; j++)
+        for (var j = 0; j < responseData.length; j++)
         {
-            if (row.mail == responseData.participants[j].email)
+            for (var k = 0; k < responseData[j].participants.length; k++)
             {
-                responseData.participants[j].username = row.username;
+                if (row.mail == responseData[j].participants[k].email)
+                {
+                    responseData[j].participants[k].username = row.username;
+                }
             }
         }
     }
