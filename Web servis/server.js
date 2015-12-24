@@ -17,6 +17,7 @@ var login = require("./log_in.js");
 var logout = require("./log_out.js");
 var getMessages = require("./get_messages_2.js");
 var getUserData = require("./get_userData.js");
+var getUserDataEditProfile = require("./getUserDataEditProfile.js");
 //var registeredUsers = require("./registeredUsers.js");
 var registeredUsers2 = require("./registeredUsers2.js");
 var addFriends = require("./addFriends.js");
@@ -24,8 +25,9 @@ var forgotPassword = require("./forgot_password.js");
 var getFriends = require("./getFriends.js");
 var saveProfilePic = require("./save_profile_pic.js");
 var sendMessage = require("./sendMessage.js");
-var createConversation = require("./createConversation.js")
+var createConversation = require("./createConversation.js");
 var getNewMessages = require("./getNewMessages.js");
+
 // **************************************
 // Register routes for Web services here.
 //
@@ -34,6 +36,7 @@ app.post("/login",login);
 app.post("/logout", logout);
 app.post("/getMessages", getMessages);
 app.post("/getUserData", getUserData);
+app.post("/getUserDataEditProfile", getUserDataEditProfile);
 //app.post("/registeredUsers",registeredUsers);
 app.post("/registeredUsers2",registeredUsers2);
 app.post("/addFriends",addFriends);
