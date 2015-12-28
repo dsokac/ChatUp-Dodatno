@@ -2,6 +2,13 @@
 var nano = require("nano")("http://localhost:5984");
 var database = nano.use("chat_app");
 
+
+/*
+	editProfile function for edit user profile	
+	RETURNS
+	** true if edit profile successfully passed
+	** false if edit profile failed in any way
+*/
 function editProfile(req, res)
 {
 	var query = req.body;
@@ -17,7 +24,7 @@ function editProfile(req, res)
 			  {
 			     if(editFriends_userExists(query.mail, data.rows))
 				 {
-										
+					//update username, gender and password of logged in user
 					updateUsername(targetDoc,query2.mail2,query3.mail3,query4.mail4);
 					response.status = "0";
 					response.message = "Successfully updated field ";
@@ -46,6 +53,12 @@ function editProfile(req, res)
 	}
 }
 
+/*
+	editFriends_userExists function for checking if user exists in database	
+	RETURNS
+	** true if user exists in database
+	** false if user don't exists in database 
+*/
 function editFriends_userExists(email, data)
 {
 	var output = false;
@@ -60,7 +73,9 @@ function editFriends_userExists(email, data)
 	}
 	return output;
 }
-
+/*
+	updateUsername function for update username, gender and password field of selected user
+*/
 function updateUsername(targetDoc, username,gender,password)
 {
 	var jsonObject = targetDoc;
