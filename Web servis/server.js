@@ -28,6 +28,7 @@ var sendMessage = require("./sendMessage.js");
 var createConversation = require("./createConversation.js");
 var editProfile = require("./editProfile.js");
 var getNewMessages = require("./getNewMessages.js");
+var addParticipantsToConversation = require("./addParticipantsToConversation.js");
 // **************************************
 // Register routes for Web services here.
 //
@@ -47,6 +48,7 @@ app.post("/sendMessage", sendMessage);
 app.post("/createConversation", createConversation);
 app.post("/editProfile", editProfile);
 app.post("/getNewMessages", getNewMessages);
+app.post("/addParticipantsToConversation", addParticipantsToConversation);
 
 app.get("/", function(req, res) {
 	res.send("Server is running.");
