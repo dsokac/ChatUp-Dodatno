@@ -58,13 +58,19 @@ function conversationExists(mail1, mail2, data)
     for (var i = 0; i < data.length; i++)
     {
         var row = data[i].value;
-        if (row.participants.indexOf(mail1) > -1 && row.participants.indexOf(mail2) > -1) 
+        if (row.participants.indexOf(mail1) > -1 && row.participants.indexOf(mail2) > -1 && isGroupChat(row.participants)) 
         {
 			exists = true;
 			break;
 		}
     }
     return exists;
+}
+
+function isGroupChat(participants)
+{
+    var participantCount = participants.split(",").length;
+    return participantCount > 2 ? true : false;
 }
 
 // Add register() to export module.
