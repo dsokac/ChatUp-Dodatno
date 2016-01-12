@@ -19,6 +19,8 @@ io.on('connection', function(socket) {
 		client.id = data.id;
 		client.socket = socket.id;
 		
+		console.log(socket.id+"\n\n");
+		
 		registered_clients.push(client);
 		console.log("Registered client "+data.id+"\n"+registered_clients+"\n");
 		
@@ -146,16 +148,21 @@ function addNewNotif(clientIndex, notifType, notif)
 
 function sendQueuedNotifs(clientIndex, socketID)
 {
+	console.log("sending queued notifs " + socketID + "\n\n");
 	var friendRequests = queued_notifications[clientIndex].friendRequests;
 	var numOfRequests = friendRequests.length;
 	
+	console.log(numOfRequests+"\n\n");
 	for(var i = 0; i < friendRequests.length; i++) sendFriendRequest(io.to(socketID),friendRequests[i]);
+	
 	
 	queued_notifications[clientIndex].friendRequests = [];
 	var num = parseInt(queued_notifications[clientIndex].numOfnotifs)
 	num -= parseInt(numOfRequests);
 	if(num < 0) num = 0;
 	queued_notifications[clientIndex].numOfnotifs = num;
+	
+	console.log(queued_notifications[clientIndex].numOfnotifs+"\n\n");
 	
 	var newMessagesStock = queued_notifications[clientIndex].messages;
 	var numOfMessages = newMessagesStock.length;
@@ -175,6 +182,7 @@ function sendFriendRequest(reciever,oNotif)
 {
 	var nFrom = oNotif.from;
 	var message = "User "+nFrom+" added you as friend on ChatUP.";
+	console.log(message+"\n\n");
 	reciever.emit("friendRequest",message);
 }
 
