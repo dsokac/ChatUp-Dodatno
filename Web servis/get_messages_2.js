@@ -4,7 +4,7 @@ var database = nano.use("chat_app");
 
 function getMessages(req, res)
 {
-	var email = req.query.email;
+	var email = req.body.email;
 	var response = new Object();
 	
 	if (email) {

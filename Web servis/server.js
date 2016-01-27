@@ -5,7 +5,7 @@ var app = express();
 // Include 'body-parser' library for reading POST data
 // and make the application use it.
 var bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({limit: "200mb", extended: true}));
 
 
 // **************************************
