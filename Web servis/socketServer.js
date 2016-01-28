@@ -11,7 +11,7 @@ app.get('/', function(req, res) {
 	res.sendFile(__dirname+'/index.html');
 });
 
-io.on('connection', function(socket) {
+io.sockets.on('connection', function(socket) {
 	
 	socket.on('registration',function(data){
 		console.log(data);
@@ -22,58 +22,71 @@ io.on('connection', function(socket) {
 		console.log(socket.id+"\n\n");
 		
 		registered_clients.push(client);
-		console.log("Registered client "+data.id+"\n"+registered_clients+"\n");
+                console.log(registered_clients);
+		console.log("line26 - Registered client "+data.id+"\n"+registered_clients+"\n");
 		
-		console.log("QUEUE: "+queued_notifications+"\n\n");
-		
-		
+		for(var i = 0; i < registered_clients.length; i++) {
+			console.log("line29 - QUEUE: "+registered_clients[i].id+"\n\n");
+		}
+
 		var i = hasClientQueuedNotifs(client.id);
 		
 		if(i != -1)
 		{
-			console.log("QUEUE for me: "+queued_notifications[i]+"\n\n");
+			console.log("line39 - QUEUE for me: "+queued_notifications[i]+"\n\n");
 			sendQueuedNotifs(i,socket.id);
-		}
+		}	
 		
 	});
 	
 	socket.on('disconnect',function(){
+		console.log("line46 - " + registered_clients);
 		for(var i = 0; i < registered_clients.length; i++)
 		{
 			var current = registered_clients[i];
-			if(current.socket = socket.id)
+			if(current.socket == socket.id)
 			{
+				console.log("line55 - " + current.socket + " " + current.id);
 				registered_clients.splice(i,1);
 			}
 		}
 		console.log("user disconnected");
-		console.log(registered_clients);
+		console.log("line60 - " + registered_clients);
 	});
 	
 	socket.on('newMessage',function(data){
 		console.log("recieved message\n");
 		console.log(data);
 
-		var sender = data.from;
-		var reciever = data.to;
+		var sender = data.sender;
 
-		if(isClientConnected(reciever)) 
-		{
-			io.sockets.socket(getClientSocket(reciever)).emit("newMessage", sender+" send you new message");
-		}
-		else 
-		{
-			var index = hasClientQueuedNotifs(reciever);
+		console.log("line66 - sender is " + sender);
+		console.log("participants data " + data.participants);
+
+		for(var i = 0; i < data.participants.length; i++) {
+			var reciever = data.participants[i];
+
+			console.log("line70 - Receiver is " + reciever);
+
+			if(isClientConnected(reciever)) 
+			{
+				io.to(getClientSocket(reciever)).emit("newMessage",sender+" sent you new message");
+				console.log("message is sent directly");
+
+			}
+			else 
+			{
+				var index = hasClientQueuedNotifs(reciever);
 				if(index != -1) addNewNotif(index,"newMessage",data);
 				else
 				{
 					queued_notifications.push({id:reciever, numOfnotifs:0, friendRequests:[], messages:[]});
 					index = hasClientQueuedNotifs(reciever);
 					addNewNotif(index,"newMessage",data);
-					console.log("MSG notif not send with data:"+queued_notifications+", saved in queued_notifications\n");
-				}
+					console.log("MSG notif not send with data:"+queued_notifications+", saved in queued_notifications, length is " + queued_notifications.length + "\n");
+				}	
+			}
 		}
-
 	});
 	
 	socket.on('friendRequest',function(data){
@@ -81,10 +94,13 @@ io.on('connection', function(socket) {
 			var sender = data.from;
 			var reciever = data.to;
 					
-			if(isClientConnected(reciever)) io.sockets.socket(getClientSocket(reciever)).emit("friendRequest","User "+sender+" added you as friend on ChatUp.");
+			if(isClientConnected(reciever)) io.to(getClientSocket(reciever)).emit("friendRequest","User "+sender+" added you as friend on ChatUp.");
 			else 
 			{
 				var index = hasClientQueuedNotifs(reciever);
+ 
+
+                        console.log('line91 - Index number for friendRequest is  ' + index);
 				if(index != -1) addNewNotif(index,"friendRequest",data);
 				else
 				{
@@ -106,6 +122,7 @@ function isClientConnected(id)
 	for(var i = 0; i < registered_clients.length; i++)
 	{
 		var current = registered_clients[i];
+		console.log("line113 - current user is " + current.id + " and socket is " + current.socket);
 		if(current.id == id) return true;
 	}
 	return false;
@@ -182,13 +199,17 @@ function sendFriendRequest(reciever,oNotif)
 {
 	var nFrom = oNotif.from;
 	var message = "User "+nFrom+" added you as friend on ChatUP.";
+	
+	var date = new Date();
+	var milisec = date.getMiliseconds();
+
 	console.log(message+"\n\n");
 	reciever.emit("friendRequest",message);
 }
 
 function sendMessageNotif(reciever, oNotif)
 {
-	var nFrom = oNotif.from;
+	var nFrom = oNotif.sender;
 	var message = "You received new message from "+nFrom+".";
 	reciever.emit("newMessage",message);
 }
