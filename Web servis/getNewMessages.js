@@ -32,6 +32,7 @@ function getNewMessages(req, res)
 	}
 }
 
+// Filters conversations by ID
 function filterMessagesByChatID(chatID, data)
 {
     var messages = null;
@@ -47,6 +48,7 @@ function filterMessagesByChatID(chatID, data)
     return messages;
 }
 
+// Compares two messages
 function compareMessages(messageA, messageB)
 {
     var returnValue;
@@ -63,6 +65,8 @@ function compareMessages(messageA, messageB)
     return returnValue;
 }
 
+// Filters messages by timestamp. It returns messages
+// newer than the given timestamp.
 function filterMessagesByTimestamp(messages, timestamp)
 {
     var newMessages = new Array();

@@ -2,6 +2,7 @@
 var nano = require("nano")("http://localhost:5984");
 var database = nano.use("chat_app");
 
+// Adds new participants to the conversation
 function addParticipantsToConversation(req, res)
 {
     var query = req.body;
@@ -57,6 +58,8 @@ function addParticipantsToConversation(req, res)
     }
 }
 
+// Filters the conversations by ID. Result of filtering should
+// be a list of one conversation. That one conversation returns.
 function getConversationByID(data, id)
 {
     var conversation = null;

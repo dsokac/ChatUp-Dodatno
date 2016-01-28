@@ -2,6 +2,8 @@
 var nano = require("nano")("http://localhost:5984");
 var database = nano.use("chat_app");
 
+// Retrieves all conversations in which the user
+// (designated by it's email) participates.
 function getMessages(req, res)
 {
 	var email = req.body.email;
@@ -45,6 +47,7 @@ function getMessages(req, res)
 	}
 }
 
+// Gets all releveant data for chat
 function getChatData(email, data)
 {
 	var chatData = new Array();
@@ -63,6 +66,8 @@ function getChatData(email, data)
 	return chatData;
 }
 
+// Creates an array of users for participants (originally it's
+// just one string)
 function createUserObjectArray(userArray)
 {
     var userObjectArray = new Array();
@@ -76,6 +81,7 @@ function createUserObjectArray(userArray)
     return userObjectArray;
 }
 
+// Retrieves the usernames for the participants
 function getParticipantUsernames(responseData, data)
 {
     for (var i = 0; i < data.length; i++)

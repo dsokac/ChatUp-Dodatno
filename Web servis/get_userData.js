@@ -2,7 +2,7 @@
 var nano = require("nano")("http://localhost:5984");
 var database = nano.use("chat_app");
 
-
+// Fetches all necessary data on one user
 function getUserData(req, res)
 {
 	var email = req.body.email;
@@ -41,7 +41,7 @@ function getUserData(req, res)
 	}
 }
 
-
+// Filters out specific user
 function getSpecificUser(email, data)
 {
 	var user = null;
